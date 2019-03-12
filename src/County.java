@@ -19,6 +19,7 @@ public class County {
 
     public void setName(String name) {
         this.name = name;
+        String test = "this is a test";
     }
 
     public int getFips() {
