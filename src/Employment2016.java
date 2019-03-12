@@ -4,11 +4,11 @@ public class Employment2016 {
     private int unemployedLaborForce;
     private double unemployedPercent;
 
-    public Employment2016(int totalLaborForce, int employedLaborForce, int unemployedLaborForce, double unemployedPercent) {
-        this.totalLaborForce = totalLaborForce;
-        this.employedLaborForce = employedLaborForce;
-        this.unemployedLaborForce = unemployedLaborForce;
-        this.unemployedPercent = unemployedPercent;
+    public Employment2016(double laborForce, double percentUnemployed, double numEmployed, double numUnemployed) {
+        this.totalLaborForce = (int)laborForce;
+        this.employedLaborForce = (int)numEmployed;
+        this.unemployedLaborForce = (int)numUnemployed;
+        this.unemployedPercent = percentUnemployed;
     }
 
     public int getTotalLaborForce() {
