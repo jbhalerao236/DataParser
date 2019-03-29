@@ -1,10 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
-
-import static com.sun.org.apache.xml.internal.security.keys.keyresolver.KeyResolver.length;
 
 public class Utils {
     public static String readFileAsString(String filepath) {
@@ -108,7 +105,7 @@ public class Utils {
             results.add(employObj);
         }
         return results;    }
-    private static ArrayList<String> format(String s) {
+    public static ArrayList<String> format(String s) {
         s.replace("\"", "");
         String[] arr = s.split(",", -1);
         ArrayList<String> valList = new ArrayList<>();
@@ -123,4 +120,94 @@ public class Utils {
         }
         return valList;
     }
+
+    public static ArrayList<String> Election2016GOPData(String electionData) {
+        String per_GOP = "";
+        String stateAbbrev = "";
+
+        String[] rows = electionData.split("\n");
+        ArrayList<String> states = new ArrayList<>();
+        ArrayList<String> perGOP = new ArrayList<>();
+        for (int i = 1; i < rows.length; i++) {
+            String countyData = rows[i];
+            String[] fields = splitData(countyData);
+            stateAbbrev = fields[8];
+            boolean contains = true;
+            if(states.size() == 0){
+                states.add(stateAbbrev);
+            } else {
+                for (int j = 0; j < states.size(); j++) {
+                    if (!(states.get(j).equals(stateAbbrev))) {
+                        contains = false;
+                    }
+
+                }
+            }
+            if (contains == false) {
+                states.add(stateAbbrev);
+            }
+        }
+        for (int i = 0; i < states.size(); i++) {
+            double sumGOP = 0;
+            double count = 0;
+                for (int j = 2; j < rows.length; j++) {
+                    String countyData = rows[j];
+                    String[] fields = splitData(countyData);
+                    if(states.get(i).equals(fields[8])){
+                        sumGOP += Double.parseDouble(fields[5]);
+                        count++;
+                    }
+                }
+                String avgGOP = String.valueOf(sumGOP/count);
+                perGOP.add(avgGOP);
+
+    }
+        ArrayList<String> result = new ArrayList<>();
+        for (int i = 0; i < states.size(); i++) {
+            result.add("state: " + states.get(i) + ", perGOP: " + perGOP.get(i));
+        }
+
+        return result;
+
+    }
+
+    public static String[] splitData(String data) {
+        String [] vals;
+        String output = "";
+
+
+        int indexOfFirstQuote = data.indexOf("\"");
+
+        if (indexOfFirstQuote == -1){
+            vals = data.split(",");
+        } else {
+            output = removeCommas(data);
+            vals = output.split(",");
+        }
+        return vals;
+    }
+    private static String removeCommas(String data) {
+        String str1 = "";
+        String str2 = "";
+
+        int indexOfFirstQuote = data.indexOf("\"");
+        int indexOfSecondQuote = data.indexOf("\"", indexOfFirstQuote+1);
+
+        String substring = data.substring(indexOfFirstQuote+1,indexOfSecondQuote);
+        substring = substring.trim();
+        str1 = data.substring(0,indexOfFirstQuote);
+        str2 = data.substring(indexOfSecondQuote+1);
+
+        int commaIndex = substring.indexOf(",");
+
+        while (commaIndex != -1) {
+            substring = substring.substring(0,commaIndex) + substring.substring(commaIndex+1);
+            commaIndex = substring.indexOf(",");
+        }
+
+        return (str1 + substring + str2);
+    }
+
+
+
 }

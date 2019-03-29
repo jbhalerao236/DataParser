@@ -24,4 +24,16 @@ public class State {
     public void setCounties(List<County> counties) {
         this.counties = counties;
     }
+
+    public void addCounty (County c){
+        counties.add(c);
+    }
+
+    public void removeCounty (County c){
+        counties.remove(c);
+    }
+
+    public County removeCounty (int index){
+        return counties.remove(index);
+    }
 }
